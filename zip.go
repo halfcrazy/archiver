@@ -93,10 +93,11 @@ func zipFile(w *zip.Writer, source string) error {
 
 		if baseDir != "" {
 			name, err := filepath.Rel(source, fpath)
+			name = strings.Replace(name, string(os.PathSeparator), "/", -1)
 			if err != nil {
 				return err
 			}
-			header.Name = path.Join(baseDir, name)
+			header.Name = strings.Join([]string{baseDir, name}, "/")
 		}
 
 		if info.IsDir() {
