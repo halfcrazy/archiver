@@ -110,7 +110,11 @@ func zipFile(w *zip.Writer, source string) error {
 				header.Method = zip.Deflate
 			}
 		}
-
+		// ref https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT
+		// Bit 11: Language encoding flag (EFS).  If this bit is set,
+		// the filename and comment fields for this file
+		// MUST be encoded using UTF-8.
+		header.Flags = 1 << 11
 		writer, err := w.CreateHeader(header)
 		if err != nil {
 			return fmt.Errorf("%s: making header: %v", fpath, err)
